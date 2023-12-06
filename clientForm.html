@@ -1,0 +1,35 @@
+<form id="clientForm" hx-post="/client" hx-target="#client" hx-swap="outerHTML">
+    <label for="firstname">Vorname</label>
+    <input type="text" id="firstname" name="firstname" placeholder="Vorname"><br>
+    <label for="lastname">Nachname</label>
+    <input type="text" id="lastname" name="lastname" placeholder="Nachname"><br>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Email"><br>
+    <label for="reminderMonth">Monat der Erinnerung</label>
+    <select id="reminderMonth" name="reminderMonth">
+        <option selected>Januar</option>
+        <option>Februar</option>
+        <option>März</option>
+        <option>April</option>
+        <option>Mai</option>
+        <option>Juni</option>
+        <option>Juli</option>
+        <option>August</option>
+        <option>September</option>
+        <option>Oktober</option>
+        <option>November</option>
+        <option>Dezember</option>
+    </select><br>
+    <fieldset>
+        <legend>Reminder Frequency</legend>
+        <div>
+            <input type="radio" id="reminderFrequencyHalfYearly" name="reminderFrequency" value="halfYearly" checked />
+            <label for="reminderFrequencyHalfYearly">halbjährlich</label>
+        </div>
+        <div>
+            <input type="radio" id="reminderFrequencyYearly" name="reminderFrequency" value="yearly" />
+            <label for="reminderFrequencyYearly">jährlich</label>
+        </div>
+    </fieldset><br>
+    <input type="submit" value="Hinzufügen">
+</form>
