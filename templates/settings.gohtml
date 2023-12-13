@@ -1,0 +1,42 @@
+{{ define "title" }}Einstellungen{{ end }}
+
+{{ define "body" }}
+    {{template "navigation.gohtml" "Settings"}}
+
+<h1>Settings</h1>
+<h2>SMTP</h2>
+<form hx-put="/settings">
+    <label for="smtp_address">Address</label>
+    <input type="text" name="smtp_address" id="smtp_address" value="{{ .SmtpAddress }}">
+    <label for="smtp_port">Port</label>
+    <input type="number" name="smtp_port" id="smtp_port" value="{{ .SmtpPort }}">
+    <label for="smtp_encryption">Encryption</label>
+    <select id="smtp_encryption">
+        <option value="ssl" {{ if .SmtpEncryption.Ssl }}selected{{ end }}>SSL/TLS</option>
+        <option value="starttls" {{ if .SmtpEncryption.Starttls }}selected{{ end }}>STARTTLS</option>
+    </select>
+    <label for="smtp_username">Username</label>
+    <input type="text" name="smtp_username" id="smtp_username" value="{{ .SmtpUsername }}">
+    <label for="smtp_password">Password</label>
+    <input type="password" name="smtp_password" id="smtp_password" value="{{ .SmtpPassword }}">
+
+{{/*    <h2>Email</h2>*/}}
+    <label for="email_from">From</label>
+    <input type="email" name="email_from" id="email_from" placeholder="max@mustermann.de">
+
+    <label for="email_from_name">From Name</label>
+    <input type="text" name="email_from_name" id="email_from_name" value="{{ .FromName }}">
+    <label for="email_subject">Subject</label>
+    <input type="text" name="email_subject" id="email_subject" value="{{ .Subject }}">
+    <label for="email_body">Body</label>
+    <textarea name="email_body" id="email_body" cols="30" rows="10">{{ .Body }}</textarea>
+{{/*    <button type="button">Test</button>*/}}
+    <button type="submit">Save</button>
+<!-- TODO add email settings-->
+<!-- TODO add test email settings functionality-->
+<!-- TODO give possibility to modify the email template-->
+<!-- TODO give possibility to set send frequency-->
+<!-- TODO give possibility to have a copy in some folder handled-->
+</form>
+
+{{end}}
