@@ -130,3 +130,11 @@ func (db *DatabaseConnection) GetSettings() *Settings {
 	}
 	return &settings
 }
+
+func (db *DatabaseConnection) UpdateSettings(settings *Settings) {
+	// TODO: hash password, see https://neverpanic.de/blog/2020/11/18/the-journey-to-storing-smtp-passwords-in-a-database/
+	_, err := db.handle.Exec("UPDATE config SET smtp_address = ?, smtp_username = ?, smtp_password = ?, smtp_port = ?, smtp_tls = ?, email_from = ?, email_from_name = ?, email_subject = ?, email_body = ? WHERE id = 0", settings.smtpAddress, settings.smtpUsername, settings.smtpPassword, settings.smtpPort, settings.smtpEncryption, settings.emailFrom, settings.emailFromName, settings.emailSubject, settings.emailBody)
+	if err != nil {
+		log.Println(err)
+	}
+}

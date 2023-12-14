@@ -3,7 +3,7 @@
     </div>
     <div class="navbar-center">
         <ul class="menu menu-horizontal bg-base-200 rounded-box">
-            <li><a {{if eq . "Clients"}} class="active" {{end}}>Klienten</a></li>
+            <li><a hx-get="/clients" hx-target="body" hx-push-url="true" {{if eq . "Clients"}} class="active" {{end}}>Klienten</a></li>
             <li><a {{if eq . "Emails"}} class="active" {{end}}>Emails</a></li>
             <li><a hx-get="/settings" hx-target="body" hx-push-url="true" {{if eq . "Settings"}} class="active" {{end}}>Einstellungen</a></li>
         </ul>

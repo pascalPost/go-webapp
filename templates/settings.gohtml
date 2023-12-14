@@ -20,18 +20,18 @@
     <label for="smtp_password">Password</label>
     <input type="password" name="smtp_password" id="smtp_password" value="{{ .SmtpPassword }}">
 
-{{/*    <h2>Email</h2>*/}}
+    <h2>Email</h2>
     <label for="email_from">From</label>
-    <input type="email" name="email_from" id="email_from" placeholder="max@mustermann.de">
+    <input type="email" name="email_from" id="email_from" placeholder="max@mustermann.de" value="{{.EmailFrom}}">
 
     <label for="email_from_name">From Name</label>
-    <input type="text" name="email_from_name" id="email_from_name" value="{{ .FromName }}">
+    <input type="text" name="email_from_name" id="email_from_name" value="{{.EmailFromName}}">
     <label for="email_subject">Subject</label>
-    <input type="text" name="email_subject" id="email_subject" value="{{ .Subject }}">
+    <input type="text" name="email_subject" id="email_subject" value="{{.EmailSubject}}">
     <label for="email_body">Body</label>
-    <textarea name="email_body" id="email_body" cols="30" rows="10">{{ .Body }}</textarea>
+    <textarea name="email_body" id="email_body" cols="30" rows="10">{{.EmailBody}}</textarea>
 {{/*    <button type="button">Test</button>*/}}
-    <button type="submit">Save</button>
+    <button type="submit">Test</button>
 <!-- TODO add email settings-->
 <!-- TODO add test email settings functionality-->
 <!-- TODO give possibility to modify the email template-->

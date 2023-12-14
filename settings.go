@@ -2,49 +2,52 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
-type encryption uint8
+type encryptionType uint8
 
 const (
-	SSL encryption = iota
+	SSL encryptionType = iota
 	STARTTLS
 )
 
-func (e encryption) Ssl() bool {
+func (e encryptionType) Ssl() bool {
 	return e == SSL
 }
 
-func (e encryption) Starttls() bool {
+func (e encryptionType) Starttls() bool {
 	return e == STARTTLS
 }
 
-func (e encryption) String() string {
+func (e encryptionType) String() string {
 	if e == SSL {
 		return "SSL"
 	} else if e == STARTTLS {
 		return "STARTTLS"
 	}
 
-	return "invalid encryption"
+	return "invalid encryptionType"
 }
 
-func newEncryption(s string) (encryption, error) {
+func newEncryptionType(s string) (encryptionType, error) {
+	s = strings.ToUpper(s)
 	if s == "SSL" {
 		return SSL, nil
 	} else if s == "STARTTLS" {
 		return STARTTLS, nil
 	}
 
-	return 0, errors.New("invalid encryption")
+	return 0, errors.New("invalid encryptionType")
 }
 
-func (e encryption) DefaultPort() uint16 {
+func (e encryptionType) DefaultPort() uint16 {
 	if e == SSL {
 		return 465
 	} else if e == STARTTLS {
@@ -54,16 +57,49 @@ func (e encryption) DefaultPort() uint16 {
 	return 0
 }
 
+type Encryption struct {
+	t encryptionType
+}
+
+func newEncryption(s string) (Encryption, error) {
+	t, err := newEncryptionType(s)
+	return Encryption{t}, err
+}
+
+func (e Encryption) Ssl() bool {
+	return e.t.Ssl()
+}
+
+func (e Encryption) Starttls() bool {
+	return e.t.Starttls()
+}
+
+func (e Encryption) String() string {
+	return e.t.String()
+}
+
 type Settings struct {
 	smtpAddress    string
 	smtpUsername   string
 	smtpPassword   string
 	smtpPort       uint16
-	smtpEncryption encryption
+	smtpEncryption Encryption
 	emailFrom      string
 	emailFromName  string
 	emailSubject   string
 	emailBody      string
+}
+
+func (s *Settings) Set(newSettings *Settings) {
+	s.smtpAddress = newSettings.smtpAddress
+	s.smtpUsername = newSettings.smtpUsername
+	s.smtpPassword = newSettings.smtpPassword
+	s.smtpPort = newSettings.smtpPort
+	s.smtpEncryption = newSettings.smtpEncryption
+	s.emailFrom = newSettings.emailFrom
+	s.emailFromName = newSettings.emailFromName
+	s.emailSubject = newSettings.emailSubject
+	s.emailBody = newSettings.emailBody
 }
 
 func (s *Settings) SmtpAddress() string {
@@ -74,7 +110,7 @@ func (s *Settings) SmtpPort() uint16 {
 	return s.smtpPort
 }
 
-func (s *Settings) SmtpEncryption() encryption {
+func (s *Settings) SmtpEncryption() Encryption {
 	return s.smtpEncryption
 }
 
@@ -86,18 +122,31 @@ func (s *Settings) SmtpPassword() string {
 	return s.smtpPassword
 }
 
+func (s *Settings) EmailFrom() string {
+	return s.emailFrom
+}
+
+func (s *Settings) EmailFromName() string {
+	return s.emailFromName
+}
+
+func (s *Settings) EmailSubject() string {
+	return s.emailSubject
+}
+
+func (s *Settings) EmailBody() string {
+	return s.emailBody
+}
+
 func NewSettings(db *DatabaseConnection) *Settings {
 	settings := db.GetSettings()
 	return settings
 }
 
-func (s *Settings) Routes(templates *template.Template) chi.Router {
+func (s *Settings) Routes(db *DatabaseConnection) chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		//if err := templates.ExecuteTemplate(w, "settings.html", s); err != nil {
-		//	log.Println(err)
-		//}
 
 		t, err := template.ParseFiles("templates/base.gohtml", "templates/settings.gohtml", "templates/navigation.gohtml")
 		if err != nil {
@@ -109,13 +158,15 @@ func (s *Settings) Routes(templates *template.Template) chi.Router {
 		}
 	})
 
-	r.Post("/test", func(w http.ResponseWriter, r *http.Request) {
-		//testClient := parseSettings(r)
-		//testClient.Send(Test)
-	})
+	//r.Post("/test", func(w http.ResponseWriter, r *http.Request) {
+	//	//testClient := parseSettings(r)
+	//	//testClient.Send(Test)
+	//})
 
 	r.Put("/", func(w http.ResponseWriter, r *http.Request) {
-		s = parseSettings(r)
+		s.Set(parseSettings(r))
+		fmt.Println(s)
+		db.UpdateSettings(s)
 	})
 
 	return r
@@ -135,7 +186,7 @@ func parseSettings(r *http.Request) *Settings {
 		return nil
 	}
 
-	encryption, err := newEncryption(r.FormValue("smtp_tls"))
+	encryption, err := newEncryption(r.FormValue("smtp_encryption"))
 	if err != nil {
 		log.Println(err)
 		return nil
