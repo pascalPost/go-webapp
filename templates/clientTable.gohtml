@@ -10,15 +10,16 @@
                 <th>Registrierungsdatum</th>
             </tr>
         </thead>
-        <tbody>
-            {{ range $index, $element := .}}
+        <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
+            {{range $index, $element := .}}
                 <tr>
-                    <td>{{ $element.FirstName }}</td>
-                    <td>{{ $element.LastName }}</td>
-                    <td>{{ $element.Email }}</td>
-                    <td>{{ $element.ReminderMonth }}</td>
-                    <td>{{ $element.ReminderFrequency.StringGerman }}</td>
-                    <td>{{ $element.RegistrationDate }}</td>
+                    <td>{{$element.FirstName}}</td>
+                    <td>{{$element.LastName}}</td>
+                    <td>{{$element.Email}}</td>
+                    <td>{{$element.ReminderMonth}}</td>
+                    <td>{{$element.ReminderFrequency.StringGerman}}</td>
+                    <td>{{$element.RegistrationDate}}</td>
+                    <td><button hx-delete="/clients/{{$element.Id}}">Delete</button></td>
                 </tr>
             {{ end}}
         </tbody>

@@ -6,6 +6,7 @@ import (
 )
 
 type Client struct {
+	Id                uint
 	FirstName         string
 	LastName          string
 	Email             string

@@ -73,8 +73,6 @@ func (c *clients) Routes() chi.Router {
 
 		c.AddClient(newClient)
 
-		log.Println(c.db.GetClients())
-
 		// respond with a new empty form
 		t, _ := template.ParseFiles("templates/clientForm.gohtml")
 		if err := t.Execute(w, c.db.GetClients()); err != nil {

@@ -64,7 +64,7 @@ func (db *DatabaseConnection) Close() {
 
 // GetClients returns all clients in the database
 func (db *DatabaseConnection) GetClients() []Client {
-	rows, err := db.handle.Query("SELECT firstname, lastname, email, reminder_month, reminder_frequency, created_at  FROM client")
+	rows, err := db.handle.Query("SELECT id, firstname, lastname, email, reminder_month, reminder_frequency, created_at  FROM client")
 	if err != nil {
 		log.Println(err)
 		return nil
@@ -81,7 +81,7 @@ func (db *DatabaseConnection) GetClients() []Client {
 	for rows.Next() {
 		var client Client
 		var reminderFrequencyStr string
-		if err := rows.Scan(&client.FirstName, &client.LastName, &client.Email, &client.ReminderMonth, &reminderFrequencyStr, &client.RegistrationDate); err != nil {
+		if err := rows.Scan(&client.Id, &client.FirstName, &client.LastName, &client.Email, &client.ReminderMonth, &reminderFrequencyStr, &client.RegistrationDate); err != nil {
 			log.Println(err)
 			return nil
 		}
