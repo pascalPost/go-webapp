@@ -2,11 +2,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    <label>
-                        <input type="checkbox" class="checkbox" />
-                    </label>
-                </th>
                 <th>Vorname</th>
                 <th>Nachname</th>
                 <th>Email</th>
@@ -18,16 +13,11 @@
         <tbody>
             {{ range $index, $element := .}}
                 <tr>
-                    <td>
-                        <label>
-                            <input type="checkbox" class="checkbox" />
-                        </label>
-                    </td>
                     <td>{{ $element.FirstName }}</td>
                     <td>{{ $element.LastName }}</td>
                     <td>{{ $element.Email }}</td>
                     <td>{{ $element.ReminderMonth }}</td>
-                    <td>{{ $element.ReminderFrequency }}</td>
+                    <td>{{ $element.ReminderFrequency.StringGerman }}</td>
                     <td>{{ $element.RegistrationDate }}</td>
                 </tr>
             {{ end}}

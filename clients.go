@@ -54,10 +54,10 @@ func (c *clients) Routes() chi.Router {
 
 		// parse reminder frequency
 		var frequency ReminderFrequency
-		if f := r.FormValue("reminderFrequency"); f == "yearly" {
-			frequency = YEAR
-		} else if f == "halfYearly" {
+		if f := r.FormValue("reminderFrequency"); f == "1" {
 			frequency = HALFYEAR
+		} else if f == "2" {
+			frequency = YEAR
 		} else {
 			log.Printf("Invalid reminder frequency %s (only yearly and halfYearly allowed)\n", f)
 			return
@@ -73,10 +73,13 @@ func (c *clients) Routes() chi.Router {
 
 		c.AddClient(newClient)
 
-		//// respond with a new empty form and a table update
-		//if err := state.templates.ExecuteTemplate(w, "client.gohtml", state.db.GetClients()); err != nil {
-		//	log.Println(err)
-		//}
+		log.Println(c.db.GetClients())
+
+		// respond with a new empty form
+		t, _ := template.ParseFiles("templates/clientForm.gohtml")
+		if err := t.Execute(w, c.db.GetClients()); err != nil {
+			log.Println(err)
+		}
 	})
 
 	return r

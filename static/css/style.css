@@ -1,0 +1,70 @@
+:root{
+    --color-text-primary: #1b1b1b;
+    --color-text-contrast: #4e4e4e;
+    --color-background: #fff;
+    --color-background-accent: #f9f9fb;
+    --accent-color: #0069c2;
+    --accent-background-color: #0085f230;
+    --font-body: Roboto, sans-serif;
+    --max-width: 1440px;
+}
+
+[data-theme="dark"] {
+    --color-text-primary: #fff;
+    --color-text-contrast: #cdcdcd;
+    --color-background: #1b1b1b;
+    --color-background-accent: #343434;
+    --accent-color: #8cb4ff;
+    --accent-background-color: #0085f230;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+}
+
+header{
+    background-color: var(--color-background-accent);
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 2rem;
+    height: 4rem;
+    align-items: center;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav > ul > li {
+    display: inline-block;
+    list-style: none;
+}
+
+nav ul li a,
+nav ul li a:hover,
+nav ul li a:active,
+nav ul li a:visited {
+    color: var(--color-text-contrast);
+    text-decoration: none;
+    text-transform: uppercase;
+    display: block;
+    padding: .5rem;
+}
+
+nav ul li a:hover {
+    color: var(--accent-color);
+    background-color: var(--accent-background-color);
+    border-radius: 0.25rem;
+}
+
+nav ul li a.active {
+    color: var(--accent-color);
+    background-color: var(--accent-background-color);
+    border-radius: 0.25rem;
+    pointer-events: none;
+}

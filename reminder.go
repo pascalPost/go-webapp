@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type Client struct {
@@ -20,7 +21,27 @@ const (
 	YEAR
 )
 
+func NewReminderFrequency(s string) (ReminderFrequency, error) {
+	if s == "HALFYEAR" {
+		return HALFYEAR, nil
+	} else if s == "YEAR" {
+		return YEAR, nil
+	}
+
+	return 0, fmt.Errorf("invalid reminder frequency: %s", s)
+}
+
 func (r ReminderFrequency) String() string {
+	if r == HALFYEAR {
+		return "HALFYEAR"
+	} else if r == YEAR {
+		return "YEAR"
+	}
+
+	return "invalid reminder frequency"
+}
+
+func (r ReminderFrequency) StringGerman() string {
 	if r == HALFYEAR {
 		return "halbjährlich"
 	} else if r == YEAR {
@@ -33,34 +54,11 @@ func (r ReminderFrequency) String() string {
 type month uint8
 
 func NewMonth(s string) (month, error) {
-	switch s {
-	case "Januar":
-		return 1, nil
-	case "Februar":
-		return 2, nil
-	case "März":
-		return 3, nil
-	case "April":
-		return 4, nil
-	case "Mai":
-		return 5, nil
-	case "Juni":
-		return 6, nil
-	case "Juli":
-		return 7, nil
-	case "August":
-		return 8, nil
-	case "September":
-		return 9, nil
-	case "Oktober":
-		return 10, nil
-	case "November":
-		return 11, nil
-	case "Dezember":
-		return 12, nil
-	default:
+	m, err := strconv.ParseUint(s, 10, 8)
+	if err != nil || m < 1 || m > 12 {
 		return 0, fmt.Errorf("invalid month: %s", s)
 	}
+	return month(m), nil
 }
 
 func (m month) String() string {

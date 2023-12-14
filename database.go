@@ -80,9 +80,16 @@ func (db *DatabaseConnection) GetClients() []Client {
 
 	for rows.Next() {
 		var client Client
-		if err := rows.Scan(&client.FirstName, &client.LastName, &client.Email, &client.ReminderMonth, &client.ReminderFrequency, &client.RegistrationDate); err != nil {
+		var reminderFrequencyStr string
+		if err := rows.Scan(&client.FirstName, &client.LastName, &client.Email, &client.ReminderMonth, &reminderFrequencyStr, &client.RegistrationDate); err != nil {
 			log.Println(err)
 			return nil
+		}
+		if reminderFrequency, err := NewReminderFrequency(reminderFrequencyStr); err != nil {
+			log.Println(err)
+			return nil
+		} else {
+			client.ReminderFrequency = reminderFrequency
 		}
 		clients = append(clients, client)
 	}
@@ -96,7 +103,7 @@ func (db *DatabaseConnection) GetClients() []Client {
 
 // AddClient adds a new client to the database
 func (db *DatabaseConnection) AddClient(client Client) {
-	_, err := db.handle.Exec("INSERT INTO client (firstname, lastname, email, reminder_month, reminder_frequency) VALUES (?, ?, ?, ?, ?)", client.FirstName, client.LastName, client.Email, client.ReminderMonth, client.ReminderFrequency)
+	_, err := db.handle.Exec("INSERT INTO client (firstname, lastname, email, reminder_month, reminder_frequency) VALUES (?, ?, ?, ?, ?)", client.FirstName, client.LastName, client.Email, client.ReminderMonth, client.ReminderFrequency.String())
 	if err != nil {
 		log.Println(err)
 	}
