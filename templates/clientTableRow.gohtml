@@ -6,9 +6,9 @@
     <td>{{.ReminderFrequency.StringGerman}}</td>
     <td>{{.RegistrationDate}}</td>
     <td>
-        <button hx-delete="/clients/{{.Id}}" hx-confirm="Sind Sie sicher?" hx-swap="swap:1s">Löschen</button>
+        <button hx-delete="/client/{{.Id}}" hx-confirm="Sind Sie sicher?" hx-swap="swap:1s">Löschen</button>
     </td>
     <td>
-        <button hx-get="/clients/{{.Id}}/edit">Bearbeiten</button>
+        <button hx-get="/client/{{.Id}}/edit">Bearbeiten</button>
     </td>
 </tr>

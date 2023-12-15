@@ -29,15 +29,6 @@ func NewClients(db *DatabaseConnection) *clients {
 func (c *clients) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.ParseFiles("templates/base.gohtml", "templates/clients.gohtml", "templates/navigation.gohtml", "templates/clientForm.gohtml", "templates/clientTable.gohtml", "templates/clientTableRow.gohtml")
-
-		clients := c.GetClients()
-		if err := t.Execute(w, clients); err != nil {
-			log.Println(err)
-		}
-	})
-
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Println(err)

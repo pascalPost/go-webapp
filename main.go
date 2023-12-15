@@ -40,7 +40,16 @@ func main() {
 		http.Redirect(w, r, "/clients", http.StatusPermanentRedirect)
 	})
 
-	r.Mount("/clients", NewClients(state.db).Routes())
+	r.Get("/clients", func(w http.ResponseWriter, r *http.Request) {
+		t, _ := template.ParseFiles("templates/base.gohtml", "templates/clients.gohtml", "templates/navigation.gohtml", "templates/clientForm.gohtml", "templates/clientTable.gohtml", "templates/clientTableRow.gohtml")
+
+		clients := state.db.GetClients()
+		if err := t.Execute(w, clients); err != nil {
+			log.Println(err)
+		}
+	})
+
+	r.Mount("/client", NewClients(state.db).Routes())
 	r.Mount("/settings", NewSettings(state.db).Routes(state.db))
 
 	if err := http.ListenAndServe(":3000", r); err != nil {
