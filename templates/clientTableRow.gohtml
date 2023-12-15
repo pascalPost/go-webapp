@@ -1,0 +1,14 @@
+<tr>
+    <td>{{.FirstName}}</td>
+    <td>{{.LastName}}</td>
+    <td>{{.Email}}</td>
+    <td>{{.ReminderMonth}}</td>
+    <td>{{.ReminderFrequency.StringGerman}}</td>
+    <td>{{.RegistrationDate}}</td>
+    <td>
+        <button hx-delete="/clients/{{.Id}}" hx-confirm="Sind Sie sicher?" hx-swap="swap:1s">Löschen</button>
+    </td>
+    <td>
+        <button hx-get="/clients/{{.Id}}/edit">Bearbeiten</button>
+    </td>
+</tr>

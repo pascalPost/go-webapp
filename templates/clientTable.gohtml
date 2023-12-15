@@ -1,5 +1,5 @@
-<div class="overflow-x-auto">
-    <table class="table">
+<div>
+    <table>
         <thead>
             <tr>
                 <th>Vorname</th>
@@ -8,19 +8,13 @@
                 <th>Erinnerungs Month</th>
                 <th>Erinnerungs Frequenz</th>
                 <th>Registrierungsdatum</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
-        <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
+        <tbody hx-target="closest tr" hx-swap="outerHTML">
             {{range $index, $element := .}}
-                <tr>
-                    <td>{{$element.FirstName}}</td>
-                    <td>{{$element.LastName}}</td>
-                    <td>{{$element.Email}}</td>
-                    <td>{{$element.ReminderMonth}}</td>
-                    <td>{{$element.ReminderFrequency.StringGerman}}</td>
-                    <td>{{$element.RegistrationDate}}</td>
-                    <td><button hx-delete="/clients/{{$element.Id}}">Delete</button></td>
-                </tr>
+                {{template "clientTableRow.gohtml" $element}}
             {{ end}}
         </tbody>
     </table>

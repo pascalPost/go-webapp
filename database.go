@@ -101,12 +101,35 @@ func (db *DatabaseConnection) GetClients() []Client {
 	return clients
 }
 
+func (db *DatabaseConnection) GetClient(id uint) (*Client, error) {
+	row := db.handle.QueryRow("SELECT id, firstname, lastname, email, reminder_month, reminder_frequency, created_at  FROM client WHERE id = ?", id)
+
+	var client Client
+	var reminderFrequencyStr string
+	if err := row.Scan(&client.Id, &client.FirstName, &client.LastName, &client.Email, &client.ReminderMonth, &reminderFrequencyStr, &client.RegistrationDate); err != nil {
+		return nil, err
+	}
+
+	if reminderFrequency, err := NewReminderFrequency(reminderFrequencyStr); err != nil {
+		return nil, err
+	} else {
+		client.ReminderFrequency = reminderFrequency
+	}
+
+	return &client, nil
+}
+
 // AddClient adds a new client to the database
 func (db *DatabaseConnection) AddClient(client Client) {
 	_, err := db.handle.Exec("INSERT INTO client (firstname, lastname, email, reminder_month, reminder_frequency) VALUES (?, ?, ?, ?, ?)", client.FirstName, client.LastName, client.Email, client.ReminderMonth, client.ReminderFrequency.String())
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+func (db *DatabaseConnection) UpdateClient(client Client) error {
+	_, err := db.handle.Exec("UPDATE client SET firstname = ?, lastname = ?, email = ?, reminder_month = ?, reminder_frequency = ? WHERE id = ?", client.FirstName, client.LastName, client.Email, client.ReminderMonth, client.ReminderFrequency.String(), client.Id)
+	return err
 }
 
 func (db *DatabaseConnection) DeleteClient(id uint) error {
