@@ -109,6 +109,12 @@ func (db *DatabaseConnection) AddClient(client Client) {
 	}
 }
 
+func (db *DatabaseConnection) DeleteClient(id uint) error {
+	rowsAffected, err := db.handle.Exec("DELETE FROM client WHERE id = ?", id)
+	log.Println("affected rows by delete: ", rowsAffected)
+	return err
+}
+
 func (db *DatabaseConnection) GetSettings() *Settings {
 	rows, err := db.handle.Query("SELECT smtp_address, smtp_username, smtp_password, smtp_port, smtp_tls, email_from, email_from_name, email_subject, email_body FROM config")
 	if err != nil {

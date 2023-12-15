@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type clients struct {
@@ -34,6 +35,20 @@ func (c *clients) Routes() chi.Router {
 		clients := c.GetClients()
 		if err := t.Execute(w, clients); err != nil {
 			log.Println(err)
+		}
+	})
+
+	r.Delete("/{id}", func(rw http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
+		log.Printf("deletion of client %v requested\n", idStr)
+		id, err := strconv.ParseUint(idStr, 10, 32)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		if err := c.db.DeleteClient(uint(id)); err != nil {
+			log.Println(err)
+			return
 		}
 	})
 
