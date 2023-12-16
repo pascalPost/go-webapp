@@ -49,6 +49,13 @@ func main() {
 		}
 	})
 
+	r.Get("/emails", func(w http.ResponseWriter, r *http.Request) {
+		t, _ := template.ParseFiles("templates/base.gohtml", "templates/emails.gohtml", "templates/navigation.gohtml")
+		if err := t.Execute(w, nil); err != nil {
+			log.Println(err)
+		}
+	})
+
 	r.Mount("/client", NewClients(state.db).Routes())
 	r.Mount("/settings", NewSettings(state.db).Routes(state.db))
 
