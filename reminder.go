@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strconv"
+	"time"
 )
 
 type Client struct {
@@ -10,9 +10,9 @@ type Client struct {
 	FirstName         string
 	LastName          string
 	Email             string
-	ReminderMonth     month
 	ReminderFrequency ReminderFrequency
 	RegistrationDate  string
+	LastEmail         time.Time
 }
 
 type ReminderFrequency uint8
@@ -50,45 +50,4 @@ func (r ReminderFrequency) StringGerman() string {
 	}
 
 	return "invalid reminder frequency"
-}
-
-type month uint8
-
-func NewMonth(s string) (month, error) {
-	m, err := strconv.ParseUint(s, 10, 8)
-	if err != nil || m < 1 || m > 12 {
-		return 0, fmt.Errorf("invalid month: %s", s)
-	}
-	return month(m), nil
-}
-
-func (m month) String() string {
-	switch m {
-	case 1:
-		return "Januar"
-	case 2:
-		return "Februar"
-	case 3:
-		return "März"
-	case 4:
-		return "April"
-	case 5:
-		return "Mai"
-	case 6:
-		return "Juni"
-	case 7:
-		return "Juli"
-	case 8:
-		return "August"
-	case 9:
-		return "September"
-	case 10:
-		return "Oktober"
-	case 11:
-		return "November"
-	case 12:
-		return "Dezember"
-	default:
-		return "Invalid month"
-	}
 }

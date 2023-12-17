@@ -1,9 +1,9 @@
 ### Send POST request with body as parameters
-POST http://localhost:3000/clients
+POST http://localhost:3000/client
 Content-Type: application/x-www-form-urlencoded
 
 firstname = Max &
 lastname = Mustermann &
 email = Max@mustermann.de &
-reminderMonth = 3 &
+lastReminder = 2023-12 &
 reminderFrequency = 1

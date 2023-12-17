@@ -15,46 +15,28 @@
             </div>
         </div>
         <div>
-            <div>
-                <label for="email">
-                    Email
-                </label>
-                <input type="email" id="email" name="email" placeholder="max@mustermann.de">
-            </div>
+            <label for="email">
+                Email
+            </label>
+            <input type="email" id="email" name="email" placeholder="max@mustermann.de">
         </div>
         <div>Erinnerung</div>
         <div>
+            <label for="lastReminder">
+                Letzte Erinnerung
+            </label>
+            <input type="month" id="lastReminder" name="lastReminder" placeholder="2023-12">
+            {{/* TODO enhance month specifier */}}
+        </div>
+        <div>
+            <label for="reminderFrequency">
+                Frequenz
+            </label>
             <div>
-                <label for="reminderMonth">
-                    Monat
-                </label>
-                <div>
-                    <select id="reminderMonth" name="reminderMonth">
-                        <option value="1" selected>Januar</option>
-                        <option value="2">Februar</option>
-                        <option value="3">März</option>
-                        <option value="4">April</option>
-                        <option value="5">Mai</option>
-                        <option value="6">Juni</option>
-                        <option value="7">Juli</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">Oktober</option>
-                        <option value="11">November</option>
-                        <option value="12">Dezember</option>
-                    </select>
-                </div>
-            </div>
-            <div>
-                <label for="reminderFrequency">
-                    Frequenz
-                </label>
-                <div>
-                    <select id="reminderFrequency" name="reminderFrequency">
-                        <option value="1" selected>Halbjährlich</option>
-                        <option value="2">Jährlich</option>
-                    </select>
-                </div>
+                <select id="reminderFrequency" name="reminderFrequency">
+                    <option value="1" selected>Halbjährlich</option>
+                    <option value="2">Jährlich</option>
+                </select>
             </div>
         </div>
         <div>

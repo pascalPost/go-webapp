@@ -6,7 +6,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
+
+// TODO move client db handling to this file
 
 type clients struct {
 	db *DatabaseConnection
@@ -16,9 +19,9 @@ func (c *clients) GetClients() []Client {
 	return c.db.GetClients()
 }
 
-func (c *clients) AddClient(client Client) {
-	c.db.AddClient(client)
-}
+//func (c *clients) AddClient(client Client) {
+//	c.db.AddClient(client)
+//}
 
 func NewClients(db *DatabaseConnection) *clients {
 	return &clients{
@@ -29,6 +32,15 @@ func NewClients(db *DatabaseConnection) *clients {
 func (c *clients) Routes() chi.Router {
 	r := chi.NewRouter()
 
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		t, _ := template.ParseFiles("templates/base.gohtml", "templates/clients.gohtml", "templates/navigation.gohtml", "templates/clientForm.gohtml", "templates/clientTable.gohtml", "templates/clientTableRow.gohtml")
+
+		clients := c.db.GetClients()
+		if err := t.Execute(w, clients); err != nil {
+			log.Println(err)
+		}
+	})
+
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Println(err)
@@ -37,12 +49,14 @@ func (c *clients) Routes() chi.Router {
 
 		log.Printf("received form: %s\n", r.PostForm)
 
-		// parse reminder month
-		month, err := NewMonth(r.FormValue("reminderMonth"))
+		// parse last reminder date given in YYYY-MM format
+		yearMonthStr := r.FormValue("lastReminder")
+		lastReminder, err := time.Parse("2006-01", yearMonthStr)
 		if err != nil {
 			log.Println(err)
 			return
 		}
+		log.Println("last reminder set to: ", lastReminder)
 
 		// parse reminder frequency
 		var frequency ReminderFrequency
@@ -55,15 +69,25 @@ func (c *clients) Routes() chi.Router {
 			return
 		}
 
+		// add client to database
 		newClient := Client{
 			FirstName:         r.FormValue("firstname"),
 			LastName:          r.FormValue("lastname"),
 			Email:             r.FormValue("email"),
-			ReminderMonth:     month,
 			ReminderFrequency: frequency,
 		}
 
-		c.AddClient(newClient)
+		clientId, err := c.db.AddClient(newClient)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		// add last email to database
+		if err := c.db.AddEmailAtDate(clientId, lastReminder); err != nil {
+			log.Println(err)
+			return
+		}
 
 		// respond with a new empty form
 		t, _ := template.ParseFiles("templates/clientForm.gohtml")
@@ -145,13 +169,6 @@ func (c *clients) Routes() chi.Router {
 
 		log.Printf("received form: %s\n", r.PostForm)
 
-		// parse reminder month
-		month, err := NewMonth(r.FormValue("reminderMonth"))
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
 		// parse reminder frequency
 		var frequency ReminderFrequency
 		if f := r.FormValue("reminderFrequency"); f == "1" {
@@ -168,7 +185,6 @@ func (c *clients) Routes() chi.Router {
 			FirstName:         r.FormValue("firstname"),
 			LastName:          r.FormValue("lastname"),
 			Email:             r.FormValue("email"),
-			ReminderMonth:     month,
 			ReminderFrequency: frequency,
 		}
 

@@ -37,19 +37,10 @@ func main() {
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/clients", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/client", http.StatusPermanentRedirect)
 	})
 
-	r.Get("/clients", func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.ParseFiles("templates/base.gohtml", "templates/clients.gohtml", "templates/navigation.gohtml", "templates/clientForm.gohtml", "templates/clientTable.gohtml", "templates/clientTableRow.gohtml")
-
-		clients := state.db.GetClients()
-		if err := t.Execute(w, clients); err != nil {
-			log.Println(err)
-		}
-	})
-
-	r.Get("/emails", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/email", func(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles("templates/base.gohtml", "templates/emails.gohtml", "templates/navigation.gohtml")
 		if err := t.Execute(w, nil); err != nil {
 			log.Println(err)
@@ -57,7 +48,7 @@ func main() {
 	})
 
 	r.Mount("/client", NewClients(state.db).Routes())
-	r.Mount("/settings", NewSettings(state.db).Routes(state.db))
+	r.Mount("/setting", NewSettings(state.db).Routes(state.db))
 
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)
