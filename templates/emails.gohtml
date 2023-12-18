@@ -24,10 +24,22 @@ Emails
     <table>
         <thead>
             <tr>
-                <th>Empfänger</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Email</th>
                 <th>Zeitpunkt</th>
             </tr>
         </thead>
+        <tbody>
+            {{range .}}
+                <tr>
+                    <td>{{.FirstName}}</td>
+                    <td>{{.LastName}}</td>
+                    <td>{{.Email}}</td>
+                    <td>{{.Timestamp}}</td>
+                </tr>
+            {{end}}
+        </tbody>
     </table>
 
 {{end}}
