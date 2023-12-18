@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -50,4 +51,16 @@ func (r ReminderFrequency) StringGerman() string {
 	}
 
 	return "invalid reminder frequency"
+}
+
+func (r ReminderFrequency) Months() uint8 {
+	if r == HALFYEAR {
+		return 6
+	} else if r == YEAR {
+		return 12
+	} else {
+		log.Fatal("invalid reminder frequency")
+	}
+
+	return 0
 }

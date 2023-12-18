@@ -40,14 +40,8 @@ func main() {
 		http.Redirect(w, r, "/client", http.StatusPermanentRedirect)
 	})
 
-	r.Get("/email", func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.ParseFiles("templates/base.gohtml", "templates/emails.gohtml", "templates/navigation.gohtml")
-		if err := t.Execute(w, nil); err != nil {
-			log.Println(err)
-		}
-	})
-
 	r.Mount("/client", NewClients(state.db).Routes())
+	r.Mount("/email", EmailRoutes(state.db))
 	r.Mount("/setting", NewSettings(state.db).Routes(state.db))
 
 	if err := http.ListenAndServe(":3000", r); err != nil {

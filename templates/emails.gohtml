@@ -11,10 +11,25 @@ Emails
     <table>
         <thead>
             <tr>
-                <th>Empfänger</th>
-                <th>Ausstehend Seit</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Email</th>
+                <th>Letzte Email</th>
+                <th>Nächste Email</th>
+                <th>Ausstehend seit</th>
             </tr>
         </thead>
+        <tbody>
+            {{range .Pending}}
+                <tr>
+                    <td>{{.FirstName}}</td>
+                    <td>{{.LastName}}</td>
+                    <td>{{.Email}}</td>
+                    <td>{{.LastEmailTime}}</td>
+                    <td>{{.NextEmailTime}}</td>
+                    <td>{{.PendingSince}}</td>
+                </tr>
+            {{end}}
     </table>
 
     <button>Senden</button>
@@ -27,16 +42,18 @@ Emails
                 <th>Vorname</th>
                 <th>Nachname</th>
                 <th>Email</th>
-                <th>Zeitpunkt</th>
+                <th>Letzte Email</th>
+                <th>Nächste Email</th>
             </tr>
         </thead>
         <tbody>
-            {{range .}}
+            {{range .History}}
                 <tr>
                     <td>{{.FirstName}}</td>
                     <td>{{.LastName}}</td>
                     <td>{{.Email}}</td>
-                    <td>{{.Timestamp}}</td>
+                    <td>{{.LastEmailTime}}</td>
+                    <td>{{.NextEmailTime}}</td>
                 </tr>
             {{end}}
         </tbody>
