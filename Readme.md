@@ -22,3 +22,4 @@ The app is built using the following technologies:
 - [ ] Add email history
 - [ ] Add email submission
 - [ ] Deploy as desktop app
+- [ ] Test TEMPL for enhanced go templating

@@ -68,3 +68,22 @@ nav ul li a.active {
     border-radius: 0.25rem;
     pointer-events: none;
 }
+
+main {
+    display: flex;
+    border: purple 5px solid;
+    justify-content: center;
+}
+
+.main-content {
+    display: flex;
+    flex-flow: column nowrap;
+    min-width: 0;
+    gap: 2rem;
+    overflow: scroll;
+    border: red 1px solid;
+
+    & > div {
+        border: green 1px solid;
+    }
+}

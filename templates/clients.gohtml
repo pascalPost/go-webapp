@@ -4,6 +4,11 @@
 
 {{define "body"}}
     {{template "navigation.gohtml" "Clients"}}
-    {{template "clientForm.gohtml" .}}
-    {{template "clientTable.gohtml" .}}
+
+    <main>
+        <div class="main-content">
+            {{template "clientForm.gohtml" .}}
+            {{template "clientTable.gohtml" .}}
+        </div>
+    </main>
 {{end}}
