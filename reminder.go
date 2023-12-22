@@ -12,7 +12,7 @@ type Client struct {
 	LastName          string
 	Email             string
 	ReminderFrequency ReminderFrequency
-	RegistrationDate  string
+	RegistrationDate  time.Time
 	LastEmail         time.Time
 }
 

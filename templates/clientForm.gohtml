@@ -1,26 +1,30 @@
-<div>
-    <form id="clientForm" hx-post="/client" hx-swap="outerHTML">
-        <div>
-            <div>
-                <label for="firstname">
-                    Vorname
-                </label>
-                <input type="text" id="firstname" name="firstname" placeholder="Max">
-            </div>
-            <div>
-                <label for="lastname">
-                    Nachname
-                </label>
-                <input type="text" id="lastname" name="lastname" placeholder="Mustermann">
-            </div>
+<div class="content">
+    <form hx-post="/client" hx-swap="outerHTML" class="form-small">
+        <div class="span-2">
+            <div class="divider">Kunde</div>
         </div>
         <div>
+            <label for="firstname">
+                Vorname
+            </label>
+            <input type="text" id="firstname" name="firstname" placeholder="Max">
+        </div>
+        <div>
+            <label for="lastname">
+                Nachname
+            </label>
+            <input type="text" id="lastname" name="lastname" placeholder="Mustermann">
+        </div>
+        <div class="span-2">
             <label for="email">
                 Email
             </label>
             <input type="email" id="email" name="email" placeholder="max@mustermann.de">
         </div>
-        <div>Erinnerung</div>
+        <div></div>
+        <div class="span-2">
+            <div class="divider">Erinnerung</div>
+        </div>
         <div>
             <label for="lastReminder">
                 Letzte Erinnerung
@@ -39,8 +43,9 @@
                 </select>
             </div>
         </div>
-        <div>
+        <div class="span-2" style="padding-top: 1rem;">
             <input type="submit" value="Hinzufügen">
         </div>
+        <div></div>
     </form>
 </div>

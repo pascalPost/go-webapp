@@ -8,13 +8,13 @@
             <option value="2" {{if eq .ReminderFrequency 2}}selected{{end}}>Jährlich</option>
         </select>
     </td>
-    <td>{{.LastEmail}}</td>
-    <td>{{.RegistrationDate}}</td>
+    <td>{{.LastEmail.Format "02.03.2006"}}</td>
+    <td>{{.RegistrationDate.Format "02.03.2006"}}</td>
     <td>
         <button disabled>Löschen</button>
     </td>
     <td>
-        <button hx-get="/client/{{.Id}}">Abbrechen</button>
+        <button hx-get="/client/{{.Id}}" style="margin-bottom: 5px">Abbrechen</button>
         <button hx-put="/client/{{.Id}}" hx-include="closest tr">Speichern</button>
     </td>
 </tr>
