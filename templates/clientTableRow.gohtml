@@ -3,8 +3,8 @@
     <td>{{.LastName}}</td>
     <td>{{.Email}}</td>
     <td>{{.ReminderFrequency.StringGerman}}</td>
-    <td>{{if not .LastEmail.IsZero }}{{.LastEmail.Format "02.03.2006"}}{{end}}</td>
-    <td>{{.RegistrationDate.Format "02.03.2006"}}</td>
+    <td>{{if not .LastEmail.IsZero }}{{.LastEmail.Format "02.01.2006"}}{{end}}</td>
+    <td>{{.RegistrationDate.Format "02.01.2006"}}</td>
     <td>
         <button hx-delete="/client/{{.Id}}" hx-confirm="Sind Sie sicher?" hx-swap="swap:1s">Löschen</button>
     </td>

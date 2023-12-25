@@ -203,7 +203,7 @@ select:focus {
     }
 }
 
-.client-table {
+table {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     border-collapse: collapse;
     table-layout: fixed;
@@ -257,4 +257,14 @@ button:disabled {
     background-color: var(--color-text-contrast);
     border: var(--color-text-contrast) 2px solid;
     cursor: not-allowed;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+
+#button-emails-send {
+    margin-top: 1rem;
+    max-width: 100px;
 }

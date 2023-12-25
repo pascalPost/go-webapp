@@ -3,61 +3,72 @@ Emails
 {{end}}
 
 {{define "body"}}
-{{template "navigation.gohtml" "Emails"}}
+    {{template "navigation.gohtml" "Emails"}}
 
-    <h1>Emails</h1>
-    <h2>Ausstehend</h2>
+    <main>
+        <div class="main-content">
+            <div class="content">
+                <h2>Ausstehend</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Email</th>
-                <th>Letzte Email</th>
-                <th>Nächste Email</th>
-                <th>Ausstehend seit</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{range .Pending}}
-                <tr>
-                    <td>{{.FirstName}}</td>
-                    <td>{{.LastName}}</td>
-                    <td>{{.Email}}</td>
-                    <td>{{.LastEmailTime}}</td>
-                    <td>{{.NextEmailTime}}</td>
-                    <td>{{.PendingSince}}</td>
-                </tr>
-            {{end}}
-    </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vorname</th>
+                            <th>Nachname</th>
+                            <th>Email</th>
+                            <th>Letzte Email</th>
+                            <th>Nächste Email</th>
+                            <th>Ausstehend seit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Pending}}
+                            <tr>
+                                <td>{{.FirstName}}</td>
+                                <td>{{.LastName}}</td>
+                                <td>{{.Email}}</td>
+                                <td>{{.LastEmailTime.Format "02.01.2006"}}</td>
+                                <td>{{.NextEmailTime.Format "02.01.2006"}}</td>
+                                <td>{{.PendingSince.StringGerman}}</td>
+                            </tr>
+                        {{end}}
+                </table>
 
-    <button>Senden</button>
+                <div class="flex-center">
+                    <button id="button-emails-send">Senden</button>
+                </div>
 
-    <h2>Verlauf</h2>
+            </div>
+            <div class="content">
 
-    <table>
-        <thead>
-            <tr>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Email</th>
-                <th>Letzte Email</th>
-                <th>Nächste Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{range .History}}
-                <tr>
-                    <td>{{.FirstName}}</td>
-                    <td>{{.LastName}}</td>
-                    <td>{{.Email}}</td>
-                    <td>{{.LastEmailTime}}</td>
-                    <td>{{.NextEmailTime}}</td>
-                </tr>
-            {{end}}
-        </tbody>
-    </table>
+                <h2>Verlauf</h2>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vorname</th>
+                            <th>Nachname</th>
+                            <th>Email</th>
+                            <th>Letzte Email</th>
+                            <th>Nächste Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .History}}
+                            <tr>
+                                <td>{{.FirstName}}</td>
+                                <td>{{.LastName}}</td>
+                                <td>{{.Email}}</td>
+                                <td>{{.LastEmailTime.Format "02.03.2006"}}</td>
+                                <td>{{.NextEmailTime.Format "02.03.2006"}}</td>
+                            </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </main>
 
 {{end}}
 

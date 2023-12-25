@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"html/template"
 	"log"
+	"math"
 	"net/http"
 	"time"
 )
@@ -39,7 +41,7 @@ type emailHistoryEntry struct {
 	Email         string
 	LastEmailTime time.Time
 	NextEmailTime time.Time
-	PendingSince  time.Duration
+	PendingSince  duration
 }
 
 func (db *DatabaseConnection) emailHistory() ([]emailHistoryEntry, error) {
@@ -73,12 +75,46 @@ ORDER BY email.sent_at DESC
 		}
 
 		entry.NextEmailTime = entry.LastEmailTime.AddDate(0, int(freq.Months()), 0)
-		entry.PendingSince = time.Now().Sub(entry.NextEmailTime)
+		entry.PendingSince = duration(time.Now().Sub(entry.NextEmailTime))
 
 		entries = append(entries, entry)
 	}
 
 	return entries, nil
+}
+
+// duration is a wrapper around time.Duration that implements the Months() method
+type duration time.Duration
+
+// roundTime is a helper function to round converted durations
+func roundTime(input float64) int {
+	var result float64
+
+	if input < 0 {
+		result = math.Ceil(input - 0.5)
+	} else {
+		result = math.Floor(input + 0.5)
+	}
+
+	// only interested in integer, ignore fractional
+	i, _ := math.Modf(result)
+
+	return int(i)
+}
+
+// Months returns the number of months in the duration
+func (d duration) Months() int {
+	return roundTime(time.Duration(d).Hours() / 24 / 30)
+}
+
+func (d duration) StringGerman() string {
+	months := time.Duration(d).Hours() / 24 / 30
+
+	if months < 1 {
+		return fmt.Sprintf("%v Tagen", roundTime(time.Duration(d).Hours()/24))
+	}
+
+	return fmt.Sprintf("%v Monaten", roundTime(months))
 }
 
 func EmailRoutes(db *DatabaseConnection) chi.Router {
