@@ -17,7 +17,7 @@ type State struct {
 func NewState() *State {
 	db := NewDatabaseConnection()
 	templates := template.Must(template.ParseGlob("templates/*.gohtml"))
-	settings := NewSettings(db)
+	settings := GetSettings(db)
 
 	return &State{
 		db:        db,
@@ -42,7 +42,7 @@ func main() {
 
 	r.Mount("/client", NewClients(state.db).Routes())
 	r.Mount("/email", EmailRoutes(state.db))
-	r.Mount("/setting", NewSettings(state.db).Routes(state.db))
+	r.Mount("/setting", SettingRoutes(state.db, state.settings))
 
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)

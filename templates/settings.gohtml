@@ -50,7 +50,9 @@
                     </div>
                     <div class="span-2">
                         <label for="email_body">Email Text</label>
-                        <textarea name="email_body" id="email_body" cols="30" rows="10">{{.EmailBody}}</textarea>
+                        <textarea name="email_body" id="email_body" cols="30" rows="10" style="width: 100%;">
+                            {{.EmailBody}}
+                        </textarea>
                     </div>
                 {{/*    <button type="button">Test</button>*/}}
                     <button type="submit">Test</button>
@@ -59,6 +61,7 @@
                 <!-- TODO give possibility to modify the email template-->
                 <!-- TODO give possibility to set send frequency-->
                 <!-- TODO give possibility to have a copy in some folder handled-->
+                {{/* TODO suggest default ports */}}
                 </form>
             </div>
         </div>

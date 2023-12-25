@@ -7,6 +7,21 @@ import (
 	"time"
 )
 
+// TestKeyring tests the keyring which is used to store the SMTP credentials
+func TestKeyring(t *testing.T) {
+	service := "reminder_test"
+	username := "test"
+	password := "test_pw"
+
+	err := SaveSmtpCredentialsInKeyring(service, username, password)
+	assert.NoError(t, err)
+
+	smtp_user, smtp_pass, err := GetSmtpCredentialsFromKeyring(service)
+	assert.NoError(t, err)
+	assert.Equal(t, username, smtp_user)
+	assert.Equal(t, password, smtp_pass)
+}
+
 func TestAddAndGetClient(t *testing.T) {
 	db := NewTestDatabaseConnection()
 	defer db.Close()

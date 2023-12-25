@@ -23,20 +23,6 @@ const createClientTable string = `
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
       );`
 
-const createSettingsTable string = `
-CREATE TABLE IF NOT EXISTS config (
-    id INTEGER PRIMARY KEY CHECK (id = 0),
-    smtp_address TEXT NOT NULL,
-    smtp_username TEXT NOT NULL,
-    smtp_password TEXT NOT NULL,
-    smtp_port INTEGER NOT NULL,
-    smtp_tls TEXT CHECK( smtp_tls IN ('SSL','STARTTLS') ) NOT NULL,
-    email_from TEXT NOT NULL,
-    email_from_name TEXT NOT NULL,
-    email_subject TEXT NOT NULL,
-    email_body TEXT NOT NULL
-);`
-
 // DatabaseConnection represents a connection to the database
 type DatabaseConnection struct {
 	handle *sql.DB
@@ -51,7 +37,7 @@ func newDatabaseConnection(file string) *DatabaseConnection {
 	if _, err := db.Exec(createClientTable); err != nil {
 		panic(err)
 	}
-	if _, err := db.Exec(createSettingsTable); err != nil {
+	if err := CreateSettingsTable(db); err != nil {
 		panic(err)
 	}
 	if err := CreateEmailTable(db); err != nil {
@@ -183,43 +169,6 @@ func (db *DatabaseConnection) DeleteClient(id uint) error {
 	rowsAffected, err := db.handle.Exec("DELETE FROM client WHERE id = ?", id)
 	log.Println("affected rows by delete: ", rowsAffected)
 	return err
-}
-
-func (db *DatabaseConnection) GetSettings() *Settings {
-	rows, err := db.handle.Query("SELECT smtp_address, smtp_username, smtp_password, smtp_port, smtp_tls, email_from, email_from_name, email_subject, email_body FROM config")
-	if err != nil {
-		log.Println(err)
-		return nil
-	}
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
-			log.Println(err)
-		}
-	}(rows)
-
-	var settings Settings
-
-	for rows.Next() {
-		if err := rows.Scan(&settings.smtpAddress, &settings.smtpUsername, &settings.smtpPassword, &settings.smtpPort, &settings.smtpEncryption, &settings.emailFrom, &settings.emailFromName, &settings.emailSubject, &settings.emailBody); err != nil {
-			log.Println(err)
-			return nil
-		}
-	}
-
-	if err = rows.Err(); err != nil {
-		log.Println(err)
-		return nil
-	}
-	return &settings
-}
-
-func (db *DatabaseConnection) UpdateSettings(settings *Settings) {
-	// TODO: hash password, see https://neverpanic.de/blog/2020/11/18/the-journey-to-storing-smtp-passwords-in-a-database/
-	_, err := db.handle.Exec("UPDATE config SET smtp_address = ?, smtp_username = ?, smtp_password = ?, smtp_port = ?, smtp_tls = ?, email_from = ?, email_from_name = ?, email_subject = ?, email_body = ? WHERE id = 0", settings.smtpAddress, settings.smtpUsername, settings.smtpPassword, settings.smtpPort, settings.smtpEncryption, settings.emailFrom, settings.emailFromName, settings.emailSubject, settings.emailBody)
-	if err != nil {
-		log.Println(err)
-	}
 }
 
 type Email struct {

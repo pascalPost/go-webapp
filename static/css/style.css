@@ -121,7 +121,7 @@ button, input[type="submit"] {
     cursor: pointer;
 }
 
-input[type="text"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], select {
+input[type="text"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], select, textarea {
     width: 100%;
     border: var(--color-text-contrast) 2px solid;
     background-color: var(--color-background-accent);
